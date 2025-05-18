@@ -1,0 +1,23 @@
+/* global.css */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+a {
+  color: #ec4899;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

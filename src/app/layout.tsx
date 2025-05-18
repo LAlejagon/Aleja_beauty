@@ -1,21 +1,15 @@
-import './globals.css'
-import { CartProvider } from '@/context/CartContext'
-import Navbar from '@/components/Navbar'
+import '../styles/global.css';
+import type { Metadata } from 'next';
 
-export const metadata = {
-  title: 'ALEJA BEAUTY',
-  description: 'Tienda de productos de belleza',
-}
+export const metadata: Metadata = {
+  title: 'Aleja Beauty',
+  description: 'Tienda de maquillaje y belleza',
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body>
-        <CartProvider>
-          <Navbar />
-          {children}
-        </CartProvider>
-      </body>
+      <body>{children}</body>
     </html>
-  )
+  );
 }

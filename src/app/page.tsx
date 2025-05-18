@@ -1,15 +1,11 @@
-'use client'
-import { useEffect } from 'react';
-import { supabase } from '@/utils/supabaseClient';
+import '../styles/home.css';
 
-export default function Home() {
-  useEffect(() => {
-    const test = async () => {
-      const { data, error } = await supabase.from('categories').select('*');
-      console.log('test supabase:', data, error);
-    };
-    test();
-  }, []);
-
-  return <div className="text-center mt-20">Prueba de conexión con Supabase</div>;
+export default function HomePage() {
+  return (
+    <div className="home">
+      <h1>Bienvenido a Aleja Beauty 💄</h1>
+      <p>Descubre productos de belleza y cuidado personal</p>
+      <a href="/tienda" className="go-shop">Ir a la tienda</a>
+    </div>
+  );
 }

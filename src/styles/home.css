@@ -1,0 +1,61 @@
+.home {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.home h1 {
+  font-size: 2rem;
+  color: #ec4899;
+}
+
+.home p {
+  margin-top: 1rem;
+  color: #555;
+}
+
+.go-shop {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: #ec4899;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+}
+.go-shop:hover {
+  background: #db2777;
+}
+.home {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home h1 {
+  font-size: 2rem;
+  color: #ec4899;
+  margin-bottom: 0.5rem;
+}
+
+.home p {
+  margin-top: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.go-shop {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: #ec4899;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+
+.go-shop:hover {
+  background: #db2777;
+}

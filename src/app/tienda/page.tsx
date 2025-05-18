@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
+import { FaHeart } from 'react-icons/fa';
 
 type Product = {
   id: string;
@@ -43,7 +44,6 @@ export default function TiendaPage() {
       return;
     }
 
-    // Corrección aquí: usar el formato correcto para upsert
     const { error } = await supabase
       .from('cart_items')
       .upsert(
@@ -53,7 +53,7 @@ export default function TiendaPage() {
           quantity: 1,
         },
         {
-          onConflict: 'user_id,product_id', // Esto debe ser una cadena, no un array
+          onConflict: 'user_id,product_id',
         }
       );
 
@@ -62,6 +62,35 @@ export default function TiendaPage() {
       console.error(error);
     } else {
       alert('Producto agregado al carrito 🛒');
+    }
+  };
+
+  const handleAddToWishlist = async (productId: string) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      alert('Debes iniciar sesión para agregar a favoritos.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('wishlist_items')
+      .upsert(
+        {
+          user_id: user.id,
+          product_id: productId,
+        },
+        {
+          onConflict: 'user_id,product_id',
+        }
+      );
+
+    if (error) {
+      alert('Ya estaba en tu lista de deseos.');
+    } else {
+      alert('Producto añadido a favoritos ❤️');
     }
   };
 
@@ -76,7 +105,7 @@ export default function TiendaPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {products.map(product => (
-            <div key={product.id} className="border p-4 rounded shadow hover:shadow-lg transition">
+            <div key={product.id} className="border p-4 rounded shadow hover:shadow-lg transition bg-white">
               <img
                 src={product.image_url || '/placeholder.jpg'}
                 alt={product.name}
@@ -85,12 +114,20 @@ export default function TiendaPage() {
               <h2 className="font-semibold text-lg">{product.name}</h2>
               <p className="text-pink-500 font-bold">${product.price.toLocaleString()}</p>
               <p className="text-sm text-gray-500">Stock: {product.stock}</p>
-              <button
-                onClick={() => handleAddToCart(product.id)}
-                className="mt-2 bg-pink-600 text-white text-sm px-4 py-2 rounded hover:bg-pink-700"
-              >
-                Agregar al carrito
-              </button>
+              <div className="flex flex-col gap-2 mt-2">
+                <button
+                  onClick={() => handleAddToCart(product.id)}
+                  className="bg-pink-600 text-white text-sm px-4 py-2 rounded hover:bg-pink-700"
+                >
+                  Agregar al carrito
+                </button>
+                <button
+                  onClick={() => handleAddToWishlist(product.id)}
+                  className="text-red-500 hover:text-red-700 text-sm flex items-center gap-1"
+                >
+                  <FaHeart /> Añadir a favoritos
+                </button>
+              </div>
             </div>
           ))}
         </div>
