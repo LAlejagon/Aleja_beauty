@@ -1,8 +1,32 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/utils/supabaseClient';
 import '@/styles/layout.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkRole = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.role === 'admin') {
+          setIsAdmin(true);
+        }
+      }
+    };
+
+    checkRole();
+  }, []);
+
   return (
     <div className="layout">
       <header className="header">
@@ -12,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/tienda">Tienda</Link>
           <Link href="/wishlist">Favoritos</Link>
           <Link href="/checkout">Carrito</Link>
-          <Link href="/admin">Admin</Link>
+          {isAdmin && <Link href="/admin">Admin</Link>}
         </nav>
       </header>
 

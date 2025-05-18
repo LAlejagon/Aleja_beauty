@@ -1,85 +1,45 @@
-.login-container {
-  max-width: 420px;
-  margin: 2rem auto;
-  padding: 2.5rem;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.login-title {
-  font-family: 'Playfair Display', serif;
-  color: #db2777; /* Rosa similar al de Aleja Beauty */
+.login {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   text-align: center;
-  margin-bottom: 2rem;
+}
+
+.login h1 {
   font-size: 1.8rem;
-  font-weight: 700;
+  color: #ec4899;
+  margin-bottom: 1.5rem;
 }
 
-.login-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.login-input:focus {
-  outline: none;
-  border-color: #f472b6;
-  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
-}
-
-.login-button {
+.login-form input {
+  display: block;
   width: 100%;
   padding: 0.75rem;
-  background-color: #db2777;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   font-size: 1rem;
-  font-weight: 500;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #ec4899;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
-  background-color: #be185d;
+.login-form button:hover {
+  background: #db2777;
 }
 
-.login-footer {
-  text-align: center;
-  margin-top: 1.5rem;
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.login-link {
-  color: #db2777;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.login-link:hover {
-  text-decoration: underline;
-}
-
-.login-bg {
-  min-height: 100vh;
-  background-color: #fdf2f8; /* Fondo rosado claro */
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-}
-
-.login-error-message {
-  color: #ef4444;
-  background-color: #fee2e2;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.25rem;
-  font-size: 0.9rem;
-  text-align: center;
+.error {
+  color: red;
+  margin-bottom: 1rem;
 }
