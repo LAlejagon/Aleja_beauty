@@ -1,61 +1,40 @@
-.home {
+.home-hero {
+  padding: 5rem 2rem;
   text-align: center;
-  padding: 4rem 2rem;
-}
-
-.home h1 {
-  font-size: 2rem;
-  color: #ec4899;
-}
-
-.home p {
-  margin-top: 1rem;
-  color: #555;
-}
-
-.go-shop {
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  background: #ec4899;
-  color: white;
-  border-radius: 8px;
-  font-weight: bold;
-}
-.go-shop:hover {
-  background: #db2777;
-}
-.home {
-  text-align: center;
-  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  min-height: 70vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.home h1 {
-  font-size: 2rem;
+.hero-content {
+  max-width: 600px;
+  margin: auto;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
   color: #ec4899;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.home p {
-  margin-top: 1rem;
-  color: #555;
+.hero-content p {
+  font-size: 1.1rem;
+  color: #333;
   margin-bottom: 2rem;
 }
 
-.go-shop {
+.shop-button {
   display: inline-block;
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  background: #ec4899;
+  background-color: #ec4899;
   color: white;
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: bold;
-  transition: background 0.3s ease-in-out;
+  text-decoration: none;
 }
 
-.go-shop:hover {
-  background: #db2777;
+.shop-button:hover {
+  background-color: #db2777;
 }
