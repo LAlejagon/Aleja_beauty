@@ -5,21 +5,46 @@ import { supabase } from '@/utils/supabaseClient';
 import { useRouter } from 'next/navigation';
 import '@/styles/layout.css';
 
+
+type SessionUser = {
+  id: string;
+  email: string;
+  role: string;
+};
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<any>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setSession(user);
+    const fetchSession = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        setUser({
+          id: user.id,
+          email: user.email ?? '',
+          role: profile?.role ?? 'customer',
+        });
+      } else {
+        setUser(null);
+      }
     };
-    getSession();
+
+    fetchSession();
   }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setSession(null);
+    setUser(null);
     router.push('/login');
   };
 
@@ -33,8 +58,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/tienda">Tienda</Link>
           <Link href="/wishlist">Favoritos</Link>
           <Link href="/checkout">Carrito</Link>
-          {session && <Link href="/admin">Admin</Link>}
-          {session ? (
+
+          {user?.role === 'admin' && <Link href="/admin">Admin</Link>}
+          {user && <Link href="/perfil">Perfil</Link>}
+
+          {user ? (
             <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
           ) : (
             <>

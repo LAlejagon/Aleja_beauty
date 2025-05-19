@@ -55,7 +55,6 @@ export default function CheckoutPage() {
       if (error) {
         console.error('Error al cargar carrito', error);
       } else {
-        // Transformar los datos para que coincidan con el tipo CartItem
         const transformedItems = data.map(item => ({
           ...item,
           product: item.product?.[0] || { name: 'Producto desconocido', price: 0 }
@@ -121,7 +120,6 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Limpiar carrito
     await supabase.from('cart_items').delete().eq('user_id', userId!);
 
     alert('Compra realizada con éxito 🎉');
@@ -129,75 +127,121 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 mt-10">
-      <h1 className="text-3xl font-bold text-pink-600 mb-6">Finalizar compra</h1>
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-serif font-bold text-rose-800 mb-2">Finalizar compra</h1>
+        <div className="w-20 h-1 bg-gradient-to-r from-rose-600 to-pink-500 mx-auto"></div>
+      </div>
 
       {loading ? (
-        <p>Cargando carrito...</p>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+        </div>
       ) : items.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">Tu carrito está vacío.</p>
+        </div>
       ) : (
-        <>
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Resumen de productos</h2>
-            <ul className="space-y-2">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Resumen de productos */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Resumen de tu pedido</h2>
+            
+            <ul className="divide-y divide-gray-100">
               {items.map((item) => (
-                <li key={item.id} className="flex justify-between border-b pb-1">
-                  <span>{item.product.name} (x{item.quantity})</span>
-                  <span>${(item.product.price * item.quantity).toLocaleString()}</span>
+                <li key={item.id} className="py-3 flex justify-between items-center">
+                  <div>
+                    <p className="font-medium text-gray-800">{item.product.name}</p>
+                    <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
+                  </div>
+                  <p className="font-medium text-rose-700">
+                    ${(item.product.price * item.quantity).toLocaleString()}
+                  </p>
                 </li>
               ))}
             </ul>
-            <div className="text-right mt-4 text-lg font-bold text-pink-600">
-              Total: ${total.toLocaleString()}
+            
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Total:</span>
+                <span className="text-xl font-bold text-rose-800">
+                  ${total.toLocaleString()}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4 mb-6">
-            <h2 className="text-xl font-semibold">Información de envío</h2>
-            <input
-              type="text"
-              name="shipping_address"
-              onChange={handleInput}
-              placeholder="Dirección"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              name="shipping_city"
-              onChange={handleInput}
-              placeholder="Ciudad"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              name="shipping_state"
-              onChange={handleInput}
-              placeholder="Departamento"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              name="shipping_postal_code"
-              onChange={handleInput}
-              placeholder="Código postal"
-              className="w-full p-2 border rounded"
-            />
-            <textarea
-              name="notes"
-              placeholder="Notas del pedido (opcional)"
-              onChange={handleInput}
-              className="w-full p-2 border rounded"
-            />
+          {/* Formulario de envío */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Información de envío</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                <input
+                  type="text"
+                  name="shipping_address"
+                  onChange={handleInput}
+                  placeholder="Calle y número"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+                  <input
+                    type="text"
+                    name="shipping_city"
+                    onChange={handleInput}
+                    placeholder="Tu ciudad"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Departamento</label>
+                  <input
+                    type="text"
+                    name="shipping_state"
+                    onChange={handleInput}
+                    placeholder="Tu departamento"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Código postal</label>
+                <input
+                  type="text"
+                  name="shipping_postal_code"
+                  onChange={handleInput}
+                  placeholder="Tu código postal"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notas adicionales (opcional)</label>
+                <textarea
+                  name="notes"
+                  onChange={handleInput}
+                  placeholder="Instrucciones especiales para la entrega"
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                />
+              </div>
+            </div>
+            
+            <button
+              onClick={handleCheckout}
+              className="mt-6 w-full bg-gradient-to-r from-rose-700 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-rose-800 hover:to-pink-700 transition-all shadow-lg"
+            >
+              Confirmar compra
+            </button>
           </div>
-
-          <button
-            onClick={handleCheckout}
-            className="bg-pink-600 text-white font-semibold px-6 py-3 rounded hover:bg-pink-700"
-          >
-            Confirmar compra
-          </button>
-        </>
+        </div>
       )}
     </div>
   );

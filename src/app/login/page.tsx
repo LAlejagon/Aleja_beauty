@@ -13,10 +13,24 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setErrorMsg('Correo o contraseña incorrectos');
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.role === 'admin') {
+      router.push('/admin');
     } else {
       router.push('/tienda');
     }
@@ -27,8 +41,20 @@ export default function LoginPage() {
       <h1>Iniciar sesión</h1>
       <form onSubmit={handleLogin}>
         {errorMsg && <p className="error">{errorMsg}</p>}
-        <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Entrar</button>
       </form>
       <p>¿No tienes cuenta? <Link href="/register">Regístrate</Link></p>
