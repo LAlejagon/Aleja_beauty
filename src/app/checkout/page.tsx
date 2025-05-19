@@ -41,7 +41,7 @@ export default function CheckoutPage() {
 
       if (!user) {
         alert('Debes iniciar sesión para finalizar tu compra');
-        router.push('/auth/login');
+        router.push('/login');
         return;
       }
 

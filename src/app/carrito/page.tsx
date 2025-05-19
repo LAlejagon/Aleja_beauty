@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
+import { useRouter } from 'next/navigation';
 
 type Item = {
   id: string;
@@ -15,6 +16,7 @@ type Item = {
 export default function CarritoPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -24,8 +26,7 @@ export default function CarritoPage() {
         } = await supabase.auth.getUser();
 
         if (!user) {
-          setItems([]);
-          setLoading(false);
+          router.push('/login'); // Redirección si no hay usuario
           return;
         }
 
@@ -34,26 +35,30 @@ export default function CarritoPage() {
           .select('id, quantity, product:product_id(name, price, image_url)')
           .eq('user_id', user.id);
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        // Transformar los datos para que coincidan con el tipo Item
-        const transformedItems = data.map(item => ({
-          ...item,
-          product: item.product?.[0] || { name: 'Producto desconocido', price: 0, image_url: null }
+        // Estructura consistente con el tipo Item
+        const transformedItems = data.map((item: any) => ({
+          id: item.id,
+          quantity: item.quantity,
+          product: {
+            name: item.product.name,
+            price: item.product.price,
+            image_url: item.product.image_url,
+          },
         }));
 
-        setItems(transformedItems as Item[]);
+        setItems(transformedItems);
       } catch (error) {
         console.error('Error cargando carrito:', error);
+        setItems([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCart();
-  }, []);
+  }, [router]);
 
   const total = items.reduce(
     (sum, item) => sum + item.quantity * item.product.price,
