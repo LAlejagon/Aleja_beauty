@@ -8,49 +8,53 @@ import '@/styles/register.css';
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [names, setNames] = useState('');
-  const [lastnames, setLastnames] = useState('');
-  const [error, setError] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('');
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          first_name: names,
-          last_name: lastnames
-        }
-      }
+          first_name,
+          last_name,
+        },
+      },
     });
 
     if (error) {
-      setError(error.message);
-    } else {
-      router.push('/login');
+      setErrorMsg(error.message);
+      return;
     }
+
+    // Mostrar mensaje y redirigir a login
+    alert('Cuenta creada correctamente. Ahora puedes iniciar sesión.');
+    router.push('/login');
   };
 
   return (
     <div className="auth">
       <h1>Crear cuenta</h1>
       <form onSubmit={handleRegister}>
-        {error && <p className="error">{error}</p>}
+        {errorMsg && <p className="error">{errorMsg}</p>}
         <input
           type="text"
-          placeholder="Nombres"
-          value={names}
-          onChange={(e) => setNames(e.target.value)}
+          placeholder="Nombre"
+          value={first_name}
+          onChange={(e) => setFirstName(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Apellidos"
-          value={lastnames}
-          onChange={(e) => setLastnames(e.target.value)}
+          placeholder="Apellido"
+          value={last_name}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
         <input
@@ -67,7 +71,7 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Registrarme</button>
+        <button type="submit">Registrarse</button>
       </form>
       <p>¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link></p>
     </div>

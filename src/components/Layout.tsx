@@ -5,7 +5,6 @@ import { supabase } from '@/utils/supabaseClient';
 import { useRouter } from 'next/navigation';
 import '@/styles/layout.css';
 
-
 type SessionUser = {
   id: string;
   email: string;
@@ -51,28 +50,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="layout">
       <header className="header">
-        <div className="logo">
-          <Link href="/">ALEJA BEAUTY</Link>
+        <div className="header-content">
+          <div className="logo">
+            <Link href="/">ALEJA BEAUTY</Link>
+          </div>
+          
+          <div className="navigation">
+            <Link href="/tienda">TIENDA</Link>
+            <Link href="/wishlist">FAVORITOS</Link>
+            <Link href="/checkout">CARRITO</Link>
+            
+            {user ? (
+              <button onClick={handleLogout} className="logout-btn">CERRAR SESIÓN</button>
+            ) : (
+              <>
+                <Link href="/login">INICIAR SESIÓN</Link>
+                <Link href="/register">REGISTRARSE</Link>
+              </>
+            )}
+          </div>
         </div>
-        <nav className="nav">
-          <Link href="/tienda">Tienda</Link>
-          <Link href="/wishlist">Favoritos</Link>
-          <Link href="/checkout">Carrito</Link>
-
-          {user?.role === 'admin' && <Link href="/admin">Admin</Link>}
-          {user && <Link href="/perfil">Perfil</Link>}
-
-          {user ? (
-            <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
-          ) : (
-            <>
-              <Link href="/login">Iniciar sesión</Link>
-              <Link href="/register">Registrarse</Link>
-            </>
-          )}
-        </nav>
       </header>
+      
       <main className="main-content">{children}</main>
+      
       <footer className="footer">
         © {new Date().getFullYear()} Aleja Beauty. Todos los derechos reservados.
       </footer>
